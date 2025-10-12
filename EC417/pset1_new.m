@@ -8,7 +8,7 @@ delta = 0.08;     % Depreciation rate
 
 %% Compute the optimal and maximal steady state capital(Qa, Qb)
 k_ss = (3*((1/beta)-1+delta))^(-3/2); % optimal ss capital(Qa)
-k_G = (delta*3)^(-3/2); % maximal ss capital(Qb)
+k_G = (delta)^(3/2); % maximal ss capital(Qb)
 
 %% Generate initial consumption vector
 k_0 = 0.1*k_ss; % given initial capital
