@@ -221,6 +221,49 @@ if MakePlots ==1
     disp(['50th Percentile: ' num2str(quantile(aysim,.5))]);
     disp(['90th Percentile: ' num2str(quantile(aysim,.9))]);
     disp(['99th Percentile: ' num2str(quantile(aysim,.99))]);
+    disp(['99.9th Percentile: ' num2str(quantile(aysim,.999))]);
+
+    % Total wealth
+    total_wealth = sum(aysim);
+    
+    % Compute quantile cutoffs
+    p10  = quantile(aysim, 0.10);
+    p50  = quantile(aysim, 0.50);
+    p90  = quantile(aysim, 0.90);
+    p99  = quantile(aysim, 0.99);
+    p999 = quantile(aysim, 0.999);
+    
+    % Wealth sums by percentile groups
+    
+    % Bottom 50%
+    w_0_50 = sum(aysim(aysim <= p50));
+    
+    % 50%–90%
+    w_50_90 = sum(aysim(aysim > p50 & aysim <= p90));
+    
+    % 90%–99%
+    w_90_99 = sum(aysim(aysim > p90 & aysim <= p99));
+    
+    % Top 1%
+    w_top1 = sum(aysim(aysim > p99));
+    
+    % Top 0.1%
+    w_top01 = sum(aysim(aysim > p999));
+    
+    % Convert to wealth shares
+    s_0_50  = w_0_50  / total_wealth;
+    s_50_90 = w_50_90 / total_wealth;
+    s_90_99 = w_90_99 / total_wealth;
+    s_top1  = w_top1  / total_wealth;
+    s_top01 = w_top01 / total_wealth;
+    
+    % Display results
+    fprintf('\nWealth shares:\n')
+    fprintf('Bottom 50%%     : %.4f\n', s_0_50);
+    fprintf('50–90%%         : %.4f\n', s_50_90);
+    fprintf('90–99%%         : %.4f\n', s_90_99);
+    fprintf('Top 1%%         : %.4f\n', s_top1);
+    fprintf('Top 0.1%%       : %.4f\n', s_top01);
 
     %table of parameters;
     tabparam  = zeros(2,1);
