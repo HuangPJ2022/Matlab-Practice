@@ -303,22 +303,46 @@ end
     
     
 %% Lorenz curve
-% 1. Sort the asset data
-A_sorted = sort(aysim);
+% --- 1. Prepare Your MODEL Data (Aiyagari) ---
+% Assuming 'aysim' is your simulated asset vector from the model
+model_assets = sort(aysim);
+N_model = length(model_assets);
 
-% 2. Calculate Cumulative Population and Wealth
-pop_share = (1:length(A_sorted))' ./ length(A_sorted);
-wealth_share = cumsum(A_sorted) ./ sum(A_sorted);
+% Create Model Coordinates
+X_model = (1:N_model)' ./ N_model;          % Pop Share
+Y_model = cumsum(model_assets) ./ sum(model_assets); % Wealth Share
 
-% 3. Plot
+
+% --- 2. Import the STATA Data (SCF/Real Data) ---
+% Read the CSV file you just created
+% 'readmatrix' automatically detects the numeric data (skips headers usually)
+lorenz_dta = readmatrix('lorenz_data.csv');
+
+% Extract columns (Col 1 is x_share, Col 2 is y_share based on Stata export)
+Y_lorenz = lorenz_dta(:, 2); 
+X_lorenz = lorenz_dta(:, 1);
+
+% --- 3. Plot Together ---
 figure;
-plot(pop_share, wealth_share, 'LineWidth', 2); hold on;
-plot([0 1], [0 1], 'k--', 'LineWidth', 1); % Line of Equality
+hold on;
+
+% Plot Model (Blue Line)
+plot(X_model, Y_model, 'b-', 'LineWidth', 2);
+
+% Plot Stata Data (Red Dashed Line)
+plot(X_lorenz, Y_lorenz, 'r--', 'LineWidth', 2);
+
+% Plot 45-degree Line (Perfect Equality)
+plot([0 1], [0 1], 'k:', 'LineWidth', 1);
+
+% Formatting
+legend('Model (Simulated)', 'US Data (Stata Export)', 'Perfect Equality', 'Location', 'NorthWest');
 xlabel('Cumulative Share of Population');
 ylabel('Cumulative Share of Wealth');
-title('Lorenz Curve of Wealth');
-legend('Model', 'Perfect Equality', 'Location', 'NorthWest');
+title('Lorenz Curve Comparison: Model vs Data');
 grid on;
+axis([0 1 0 1]); % Ensure axes are tight to 0-1
+hold off;
 
 %% (d)
 % --- 1. Filter and Sort the Model Data ---
@@ -345,17 +369,17 @@ survival_prob_total = survival_prob * 0.10;
 log_a_model = log(a_tail);
 log_survival_model = log(survival_prob_total);
 
+% Plot THE DATA from Problem Set 6 (Item d)
+tail_dta = readmatrix('tail_top10_data.csv');
+actual_log_a_data = tail_dta(:, 1); 
+actual_log_survival_data = tail_dta(:, 2);
+
 % --- 4. Plotting ---
 figure;
 hold on;
 
-% Plot YOUR MODEL (Blue)
 plot(log_a_model, log_survival_model, 'b-', 'LineWidth', 2);
-
-% Plot THE DATA from Problem Set 6 (Item d)
-% You likely have vectors like 'wealth_data_sorted' or similar from the previous prob set.
-% Assuming you have variables: log_a_data, log_survival_data
-% plot(log_a_data, log_survival_data, 'r--', 'LineWidth', 2); 
+plot(actual_log_a_data, actual_log_survival_data, 'r--', 'LineWidth', 2); 
 
 xlabel('log(Wealth)');
 ylabel('log(1 - G(a))');
