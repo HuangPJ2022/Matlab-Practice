@@ -1,0 +1,56 @@
+function g1 = static_g1(T, y, x, params, T_flag)
+% function g1 = static_g1(T, y, x, params, T_flag)
+%
+% File created by Dynare Preprocessor from .mod file
+%
+% Inputs:
+%   T         [#temp variables by 1]  double   vector of temporary terms to be filled by function
+%   y         [M_.endo_nbr by 1]      double   vector of endogenous variables in declaration order
+%   x         [M_.exo_nbr by 1]       double   vector of exogenous variables in declaration order
+%   params    [M_.param_nbr by 1]     double   vector of parameter values in declaration order
+%                                              to evaluate the model
+%   T_flag    boolean                 boolean  flag saying whether or not to calculate temporary terms
+%
+% Output:
+%   g1
+%
+
+if T_flag
+    T = HPJedit_compare_RBC.static_g1_tt(T, y, x, params);
+end
+g1 = zeros(10, 10);
+g1(1,2)=(-(params(1)*y(9)/T(2)));
+g1(1,4)=T(7)/(T(2)*T(2))-(-(params(1)*(1+y(2)*y(9)-y(10))*(-T(7))))/(T(2)*T(2));
+g1(1,8)=(-1)/(T(2)*T(2))-(-(params(1)*(1+y(2)*y(9)-y(10))))/(T(2)*T(2));
+g1(1,9)=(-(params(1)*y(2)/T(2)));
+g1(1,10)=(-((-params(1))/T(2)));
+g1(2,3)=(-(getPowerDeriv(y(3),params(7),1)));
+g1(2,4)=1;
+g1(3,1)=(-(T(3)*T(4)));
+g1(3,4)=(-(y(1)*T(3)*T(8)));
+g1(3,5)=(-(T(4)*y(1)*y(9)*T(9)));
+g1(3,7)=1;
+g1(3,9)=(-(T(4)*y(1)*y(5)*T(9)));
+g1(4,6)=(-1);
+g1(4,7)=1;
+g1(4,8)=(-1);
+g1(5,5)=1-(1-y(10));
+g1(5,6)=(-1);
+g1(5,10)=y(5);
+g1(6,1)=1-exp(x(1))*getPowerDeriv(y(1),params(5),1);
+g1(7,1)=(-(T(4)*params(4)*T(5)));
+g1(7,2)=1;
+g1(7,4)=(-(y(1)*params(4)*T(5)*T(8)));
+g1(7,5)=(-(T(4)*y(1)*params(4)*y(9)*T(10)));
+g1(7,9)=(-(T(4)*y(1)*params(4)*y(5)*T(10)));
+g1(8,2)=1;
+g1(8,9)=(-(params(2)*params(6)*getPowerDeriv(y(9),params(6)-1,1)));
+g1(9,1)=(-(T(6)*T(3)*(1-params(4))));
+g1(9,3)=1;
+g1(9,4)=(-(T(3)*y(1)*(1-params(4))*getPowerDeriv(y(4),(-params(4)),1)));
+g1(9,5)=(-(T(6)*y(1)*(1-params(4))*y(9)*T(9)));
+g1(9,9)=(-(T(6)*y(1)*(1-params(4))*y(5)*T(9)));
+g1(10,9)=(-(params(2)*getPowerDeriv(y(9),params(6),1)));
+g1(10,10)=1;
+
+end
